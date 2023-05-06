@@ -1,3 +1,4 @@
 *.dSYM
 server
+*.out
 client
