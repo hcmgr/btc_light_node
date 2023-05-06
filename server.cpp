@@ -53,7 +53,7 @@ void handle_connections(int server_fd) {
         }
         std::cout << "client connected" << std::endl;
 
-        status = read(new_socket, buffer, 1024);
+        status = read(new_socket, buffer, 10);
         std::cout << "received: " << buffer << std::endl;
 
         std::string msg = "hello";

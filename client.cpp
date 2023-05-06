@@ -17,9 +17,23 @@ int connect_to_server(std::string IP, int port) {
     // Connect to the server
     if (connect(sock, (struct sockaddr *)&server, sizeof(server)) < 0) {
         std::cerr << "Connection failed" << std::endl;
-        return 1;
+        return -1;
     }
     return sock;
+}
+
+/**
+ * Example method of converting different data types
+ * into bytes we can send down a socket
+*/
+int send_net_msg(int socket) {
+    std::string str = "Hello mate!";
+    int num = 6969;
+
+    char buffer[sizeof(str) + sizeof(num)];
+    std::memcpy(buffer, str.c_str(), sizeof(str));
+    std::memcpy(buffer, str.c_str(), sizeof(str));
+    return send(socket, buffer, sizeof(buffer), 0);
 }
 
 /**
@@ -29,10 +43,9 @@ int connect_to_server(std::string IP, int port) {
 int minimal_client_conn(int socket) {
 
     std::cout << "connected to server" << std::endl;
-    std::string message = "I HAVE CONNECTED";
 
-    // welcome message to server
-    if (send(socket, message.c_str(), strlen(message.c_str()), 0) < 0) {
+    // send welcome message
+    if (send_net_msg(socket) < 0) {
         std::cerr << "Send failed" << std::endl;
         return 1;
     }
@@ -53,5 +66,7 @@ int main() {
     int port = 8080;
     std::string ip = "192.168.0.41";
     int socket = connect_to_server(ip, port);
-    int status = minimal_client_conn(socket);
+    if (socket >= 0) {
+        int status = minimal_client_conn(socket);
+    }
 }
