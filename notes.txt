@@ -1,0 +1,14 @@
+----
+construct_network_msg():
+    -shows a really nice method of converting different 
+     data into bytes that we send down a socket
+    -from it, we can see that memcpy takes:
+        &dest - destination pointer
+        &src - source pointer
+        n - number of bytes to copy
+----
+recv():
+    -will block until either:
+        -buffer filled OR;
+        -socket closed
+----

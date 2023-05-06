@@ -53,12 +53,12 @@ void handle_connections(int server_fd) {
         }
         std::cout << "client connected" << std::endl;
 
-        status = read(new_socket, buffer, 10);
-        std::cout << "received: " << buffer << std::endl;
+        int num_bytes = recv(new_socket, buffer, sizeof(buffer), 0);
+        int num;
+        std::memcpy(&num, buffer, sizeof(int));
+        std::cout << "received: " << num << std::endl;
 
-        std::string msg = "hello";
-        send(new_socket, msg.c_str(), msg.length(), 0);
-        close(new_socket); // non-persistent
+        // close(new_socket); // non-persistent
     }
 }
 

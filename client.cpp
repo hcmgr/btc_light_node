@@ -4,6 +4,9 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
+#define RECV_ERROR -1
+#define SOCKET_CLOSED 0
+
 int connect_to_server(std::string IP, int port) {
     // Create a socket
     int sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -27,12 +30,9 @@ int connect_to_server(std::string IP, int port) {
  * into bytes we can send down a socket
 */
 int send_net_msg(int socket) {
-    std::string str = "Hello mate!";
-    int num = 6969;
-
-    char buffer[sizeof(str) + sizeof(num)];
-    std::memcpy(buffer, str.c_str(), sizeof(str));
-    std::memcpy(buffer, str.c_str(), sizeof(str));
+    int num = 1234;
+    char buffer[sizeof(num)];
+    std::memcpy(buffer, &num, sizeof(num));
     return send(socket, buffer, sizeof(buffer), 0);
 }
 
@@ -50,11 +50,19 @@ int minimal_client_conn(int socket) {
         return 1;
     }
 
+    // receive some data
     char buffer[1024];
-    if (recv(socket, buffer, sizeof(buffer), 0) < 0) {
-        std::cerr << "receive failed" << std::endl;
-        return 1;
+    int status = recv(socket, buffer, sizeof(buffer), 0);
+    switch (status) {
+        case SOCKET_CLOSED: // closed
+            std::cerr << "server closed socket" << std::endl;
+            return SOCKET_CLOSED;
+
+        case RECV_ERROR: //error
+            std::cerr << "receive failed" << std::endl;
+            return RECV_ERROR;
     }
+
     std::cout << "data received from server: " << buffer << std::endl;
  
     // Close the socket
@@ -64,8 +72,9 @@ int minimal_client_conn(int socket) {
 
 int main() {
     int port = 8080;
-    std::string ip = "192.168.0.41";
-    int socket = connect_to_server(ip, port);
+    std::string pi_ip = "192.168.0.41";
+    std::string localhost = "127.0.0.1";
+    int socket = connect_to_server(localhost, port);
     if (socket >= 0) {
         int status = minimal_client_conn(socket);
     }

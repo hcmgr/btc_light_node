@@ -1,5 +1,9 @@
+## default ##
 *.dSYM
-server
 *.out
+notes
+.vscode
+
+server
 client
 notes
