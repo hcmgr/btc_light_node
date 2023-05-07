@@ -3,6 +3,9 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <string>
+#include <array>
+
+#include "block.h"
 
 int open_socket(int port, int max_conns) {
     int server_fd;
@@ -44,8 +47,7 @@ int open_socket(int port, int max_conns) {
 void handle_connections(int server_fd) {
     int new_socket;
     int status;
-    char buffer[1024];
-
+    
     while (true) {
         if ((new_socket = accept(server_fd, 0, 0)) < 0) {
             std::cout << "accept error" << std::endl;
@@ -53,18 +55,25 @@ void handle_connections(int server_fd) {
         }
         std::cout << "client connected" << std::endl;
 
-        int num_bytes = recv(new_socket, buffer, sizeof(buffer), 0);
-        int num;
-        std::memcpy(&num, buffer, sizeof(int));
-        std::cout << "received: " << num << std::endl;
+        // receive some data
+        std::array<uint8_t, 80> bytes;
+        int num_bytes = recv(new_socket, bytes.data(), 80, 0);
+        std::cout << num_bytes << std::endl;
+        
+        BlockHeader bh = BlockHeader::from_serialised(bytes);
 
-        // close(new_socket); // non-persistent
+        std::cout << bh.version << std::endl; 
+        std::cout << bh.time << std::endl; 
+        std::cout << bh.nBits << std::endl; 
+        std::cout << bh.nonce << std::endl; 
+
+        close(new_socket); // non-persistent
     }
 }
 
 int main() {
     int max_conns = 1;
-    int servFd = open_socket(8080, max_conns);
+    int servFd = open_socket(8081, max_conns);
     if (servFd >= 0) {
         handle_connections(servFd);
     }

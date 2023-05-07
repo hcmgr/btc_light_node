@@ -1,9 +1,0 @@
-## default ##
-*.dSYM
-*.out
-notes
-.vscode
-
-server
-client
-notes

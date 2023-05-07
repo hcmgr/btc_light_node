@@ -4,11 +4,10 @@ EXECS=server client
 
 all: server client
 
-
-server: server.cpp
+server: server.cpp block.cpp 
 		$(CC) $(FLAGS) $^ -o $@
 
-client: client.cpp
+client: client.cpp block.cpp 
 		$(CC) $(FLAGS) $^ -o $@
 
 clean:
