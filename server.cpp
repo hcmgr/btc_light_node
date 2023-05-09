@@ -6,6 +6,7 @@
 #include <array>
 
 #include "block.h"
+#include "crypto.h"
 
 int open_socket(int port, int max_conns) {
     int server_fd;
@@ -56,16 +57,12 @@ void handle_connections(int server_fd) {
         std::cout << "client connected" << std::endl;
 
         // receive some data
+        // in this case, a bitcoin block header
         std::array<uint8_t, 80> bytes;
         int num_bytes = recv(new_socket, bytes.data(), 80, 0);
-        std::cout << num_bytes << std::endl;
         
         BlockHeader bh = BlockHeader::from_serialised(bytes);
-
-        std::cout << bh.version << std::endl; 
-        std::cout << bh.time << std::endl; 
-        std::cout << bh.nBits << std::endl; 
-        std::cout << bh.nonce << std::endl; 
+        std::cout << bh.pretty_repr() << std::endl;
 
         close(new_socket); // non-persistent
     }

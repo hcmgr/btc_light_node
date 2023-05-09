@@ -29,13 +29,3 @@ namespace crypto {
         return ss.str();
     }
 }
-
-int main() {
-    std::string test = "bibby";
-    std::array<uint8_t, SHA256_DIGEST_LENGTH> dig = crypto::sha256(test.c_str(), test.length());
-    std::cout << crypto::sha256_hex_repr(dig.data()) << std::endl;
-    return 0;
-}
-
-
-

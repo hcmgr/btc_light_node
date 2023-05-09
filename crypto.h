@@ -1,5 +1,9 @@
+#ifndef CRYPTO_HEADER_H
+#define CRYPTO_HEADER_H
+
 #include <array>
-#include <openssl/sha.h>
+
+#define SHA256_DIGEST_LENGTH 32
 
 namespace crypto {
     /**
@@ -27,3 +31,5 @@ namespace crypto {
     */
     std::string sha256_hex_repr(uint8_t* dig);
 }
+
+#endif // CRYPTO_HEADER_H

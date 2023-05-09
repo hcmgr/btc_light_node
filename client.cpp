@@ -5,6 +5,7 @@
 #include <unistd.h>
 
 #include "block.h"
+#include "crypto.h"
 
 #define RECV_ERROR -1
 #define SOCKET_CLOSED 0
@@ -34,9 +35,10 @@ int connect_to_server(std::string IP, int port) {
  * into bytes we can send down a socket
 */
 int send_net_msg(int socket) {
+    // construct a bitcoin block header and send it down socket
     uint32_t version = 0x00000001;
-    std::array<char, 32> prev_hash; prev_hash.fill(0);
-    std::array<char, 32> merkle_hash; merkle_hash.fill(0);
+    std::array<uint8_t, 32> prev_hash = crypto::sha256("bibby", 5);
+    std::array<uint8_t, 32> merkle_hash = crypto::sha256("thing", 5);
     uint32_t time = 0x00000002;
     uint32_t nBits = 0x00000003;
     uint32_t nonce = 0x00000004;

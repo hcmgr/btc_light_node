@@ -8,11 +8,11 @@ EXECS=$(TARGETS) + crypto
 
 all: $(TARGETS)
 
-server: server.cpp block.cpp 
-		$(CC) $(FLAGS) $^ -o $@
+server: server.cpp block.cpp crypto.cpp
+		$(CC) $(FLAGS) $(INCLUDES) $(LINKS) $^ -o $@
 
-client: client.cpp block.cpp 
-		$(CC) $(FLAGS) $^ -o $@
+client: client.cpp block.cpp crypto.cpp
+		$(CC) $(FLAGS) $(INCLUDES) $(LINKS) $^ -o $@
 
 crypto: crypto.cpp 
 		$(CC) $(FLAGS) $^ -o $@ $(INCLUDES) $(LINKS)

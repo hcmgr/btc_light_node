@@ -3,12 +3,13 @@
 #include <sstream>
 
 #include "block.h"
+#include "crypto.h"
 
 #define BLOCK_HEADER_SIZE 80
 
 BlockHeader::BlockHeader(){}
 
-BlockHeader::BlockHeader(uint32_t version, char* prev_hash, char* merkle_hash,
+BlockHeader::BlockHeader(uint32_t version, uint8_t* prev_hash, uint8_t* merkle_hash,
                          uint32_t time, uint32_t nbits, uint32_t nonce)
                          : version(version), time(time), nBits(nbits), nonce(nonce) {
 
@@ -67,6 +68,20 @@ std::array<uint8_t, BLOCK_HEADER_SIZE> BlockHeader::serialise() {
     acc += sizeof(nonce);
 
     return serialized;
+}
+
+std::string BlockHeader::pretty_repr() {
+    std::stringstream ss;
+    ss << "Block header: " << std::endl;
+    ss << "----------" << std::endl;
+    ss << "version: " << this->version << std::endl; 
+    ss << "previous block hash: " << crypto::sha256_hex_repr(this->hash_prev_block.data()) << std::endl;
+    ss << "merkle root hash: " << crypto::sha256_hex_repr(this->hash_merkle_root.data()) << std::endl;
+    ss << "time: " << this->time << std::endl; 
+    ss << "nBits: " << this->nBits << std::endl; 
+    ss << "nonce: " << this->nonce << std::endl;
+    ss << "----------";
+    return ss.str();
 }
 
 
