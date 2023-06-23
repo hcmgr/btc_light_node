@@ -60,7 +60,6 @@ void handle_connections(int server_fd) {
         // in this case, a bitcoin block header
         std::array<uint8_t, 80> bytes;
         int num_bytes = recv(new_socket, bytes.data(), 80, 0);
-        
         BlockHeader bh = BlockHeader::from_serialised(bytes);
         std::cout << bh.pretty_repr() << std::endl;
 

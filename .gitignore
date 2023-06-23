@@ -1,4 +1,7 @@
 notes*
 *dSYM
 *.vscode
+todo.txt
 *.out
+sock.py
+misc/
